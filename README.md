@@ -46,6 +46,11 @@ npm run dev
 npm start
 ```
 
+**Seed Database** (with sample data):
+```bash
+npm run seed
+```
+
 The server will run on `http://localhost:5000`
 Swagger docs available at `http://localhost:5000/api-docs`
 
@@ -58,8 +63,9 @@ src/
 ├── models/          # Mongoose schemas
 ├── routes/          # API routes
 ├── services/        # Business logic
-├── middleware/      # Custom middleware
-├── utils/           # Helper functions and error handling
+├── middleware/      # Custom middleware (auth, validation, rate limiting)
+├── utils/           # Helper functions (error handling, validators, monitoring)
+├── scripts/         # Database seeding and maintenance scripts
 └── server.js        # Main server file
 ```
 
@@ -74,6 +80,9 @@ src/
 - 📊 Dashboard analytics
 - 📝 Activity logging
 - 📚 Swagger API documentation
+- 🛡️ Request rate limiting (100 req/15min)
+- 📈 Performance monitoring
+- 🔍 Input validation and sanitization
 
 ## API Endpoints
 
