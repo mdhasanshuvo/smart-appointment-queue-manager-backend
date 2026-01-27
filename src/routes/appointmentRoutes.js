@@ -1,6 +1,7 @@
 const express = require('express');
 const appointmentController = require('../controllers/appointmentController');
 const authMiddleware = require('../middleware/authMiddleware');
+const { validateAppointment, handleValidationErrors } = require('../middleware/validation');
 
 const router = express.Router();
 
@@ -68,7 +69,7 @@ const router = express.Router();
  *         description: Appointment created successfully
  */
 router.get('/', authMiddleware, appointmentController.getAllAppointments);
-router.post('/', authMiddleware, appointmentController.createAppointment);
+router.post('/', authMiddleware, validateAppointment, handleValidationErrors, appointmentController.createAppointment);
 
 /**
  * @swagger
@@ -149,5 +150,47 @@ router.delete('/:id', authMiddleware, appointmentController.deleteAppointment);
  *         description: Appointment cancelled successfully
  */
 router.post('/:id/cancel', authMiddleware, appointmentController.cancelAppointment);
+
+/**
+ * @swagger
+ * /api/v1/appointments/{id}/complete:
+ *   post:
+ *     summary: Mark appointment as completed
+ *     tags:
+ *       - Appointments
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Appointment marked as completed
+ */
+router.post('/:id/complete', authMiddleware, appointmentController.completeAppointment);
+
+/**
+ * @swagger
+ * /api/v1/appointments/{id}/no-show:
+ *   post:
+ *     summary: Mark appointment as no-show
+ *     tags:
+ *       - Appointments
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Appointment marked as no-show
+ */
+router.post('/:id/no-show', authMiddleware, appointmentController.markNoShow);
 
 module.exports = router;

@@ -91,6 +91,74 @@ const cancelAppointment = async (req, res, next) => {
   }
 };
 
+const completeAppointment = async (req, res, next) => {
+  try {
+    const Appointment = require('../models/Appointment');
+    const ActivityLog = require('../models/ActivityLog');
+    
+    const appointment = await Appointment.findById(req.params.id);
+    if (!appointment) {
+      return next(new ErrorHandler('Appointment not found', 404));
+    }
+    
+    appointment.status = 'Completed';
+    await appointment.save();
+    
+    await ActivityLog.create({
+      action: 'Status Changed',
+      entity: 'Appointment',
+      entityId: appointment._id,
+      description: `Appointment for "${appointment.customerName}" marked as completed`,
+    });
+    
+    const updated = await Appointment.findById(req.params.id)
+      .populate('service')
+      .populate('assignedStaff');
+    
+    res.status(200).json({
+      success: true,
+      message: 'Appointment marked as completed',
+      data: updated,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const markNoShow = async (req, res, next) => {
+  try {
+    const Appointment = require('../models/Appointment');
+    const ActivityLog = require('../models/ActivityLog');
+    
+    const appointment = await Appointment.findById(req.params.id);
+    if (!appointment) {
+      return next(new ErrorHandler('Appointment not found', 404));
+    }
+    
+    appointment.status = 'No-Show';
+    await appointment.save();
+    
+    await ActivityLog.create({
+      action: 'Status Changed',
+      entity: 'Appointment',
+      entityId: appointment._id,
+      description: `Appointment for "${appointment.customerName}" marked as no-show`,
+    });
+    
+    const updated = await Appointment.findById(req.params.id)
+      .populate('service')
+      .populate('assignedStaff');
+    
+    res.status(200).json({
+      success: true,
+      message: 'Appointment marked as no-show',
+      data: updated,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getAllAppointments,
   getAppointmentById,
@@ -98,4 +166,6 @@ module.exports = {
   updateAppointment,
   deleteAppointment,
   cancelAppointment,
+  completeAppointment,
+  markNoShow,
 };
