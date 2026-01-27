@@ -5,6 +5,8 @@ const connectDB = require('./config/database');
 const errorMiddleware = require('./middleware/errorMiddleware');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
+const requestLogger = require('./middleware/requestLogger');
+const rateLimiter = require('./middleware/rateLimiter');
 
 // Connect to database
 connectDB();
@@ -18,6 +20,8 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(requestLogger);
+app.use(rateLimiter);
 
 // Swagger documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
