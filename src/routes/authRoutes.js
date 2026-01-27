@@ -1,5 +1,6 @@
 const express = require('express');
 const authController = require('../controllers/authController');
+const { validateEmail, validatePassword, handleValidationErrors } = require('../middleware/validation');
 
 const router = express.Router();
 
@@ -31,7 +32,7 @@ const router = express.Router();
  *         description: User registered successfully
  *       400:
  *         description: Validation failed
- */
+ */validateEmail, validatePassword, handleValidationErrors, 
 router.post('/signup', authController.signup);
 
 /**
@@ -62,7 +63,7 @@ router.post('/signup', authController.signup);
  *       401:
  *         description: Invalid credentials
  */
-router.post('/login', authController.login);
+router.post('/login', validateEmail, validatePassword, handleValidationErrors, authController.login);
 
 /**
  * @swagger

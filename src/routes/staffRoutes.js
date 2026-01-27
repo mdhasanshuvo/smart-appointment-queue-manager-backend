@@ -1,6 +1,7 @@
 const express = require('express');
 const staffController = require('../controllers/staffController');
 const authMiddleware = require('../middleware/authMiddleware');
+const { validateStaff, handleValidationErrors } = require('../middleware/validation');
 
 const router = express.Router();
 
@@ -59,7 +60,7 @@ const router = express.Router();
  *         description: Staff created successfully
  */
 router.get('/', authMiddleware, staffController.getAllStaff);
-router.post('/', authMiddleware, staffController.createStaff);
+router.post('/', authMiddleware, validateStaff, handleValidationErrors, staffController.createStaff);
 
 /**
  * @swagger
@@ -117,7 +118,7 @@ router.post('/', authMiddleware, staffController.createStaff);
  *         description: Staff deleted successfully
  */
 router.get('/:id', authMiddleware, staffController.getStaffById);
-router.put('/:id', authMiddleware, staffController.updateStaff);
+router.put('/:id', authMiddleware, validateStaff, handleValidationErrors, staffController.updateStaff);
 router.delete('/:id', authMiddleware, staffController.deleteStaff);
 
 /**

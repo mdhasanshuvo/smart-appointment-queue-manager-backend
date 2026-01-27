@@ -1,6 +1,7 @@
 const express = require('express');
 const serviceController = require('../controllers/serviceController');
 const authMiddleware = require('../middleware/authMiddleware');
+const { validateService, handleValidationErrors } = require('../middleware/validation');
 
 const router = express.Router();
 
@@ -48,7 +49,7 @@ const router = express.Router();
  *         description: Service created successfully
  */
 router.get('/', authMiddleware, serviceController.getAllServices);
-router.post('/', authMiddleware, serviceController.createService);
+router.post('/', authMiddleware, validateService, handleValidationErrors, serviceController.createService);
 
 /**
  * @swagger
@@ -106,7 +107,7 @@ router.post('/', authMiddleware, serviceController.createService);
  *         description: Service deleted successfully
  */
 router.get('/:id', authMiddleware, serviceController.getServiceById);
-router.put('/:id', authMiddleware, serviceController.updateService);
+router.put('/:id', authMiddleware, validateService, handleValidationErrors, serviceController.updateService);
 router.delete('/:id', authMiddleware, serviceController.deleteService);
 
 module.exports = router;
