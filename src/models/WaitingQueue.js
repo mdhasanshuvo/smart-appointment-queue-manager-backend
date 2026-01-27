@@ -31,6 +31,5 @@ const waitingQueueSchema = new mongoose.Schema({
 
 // Index for queue ordering
 waitingQueueSchema.index({ status: 1, position: 1 });
-waitingQueueSchema.index({ appointment: 1 });
 
 module.exports = mongoose.model('WaitingQueue', waitingQueueSchema);
