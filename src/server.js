@@ -60,9 +60,13 @@ app.use((req, res) => {
 app.use(errorMiddleware);
 
 const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`);
-});
 
-module.exports = server;
+// Only start a listener when running outside Vercel; Vercel invokes the handler directly.
+if (process.env.VERCEL !== '1') {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+    console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`);
+  });
+}
+
+module.exports = app;
