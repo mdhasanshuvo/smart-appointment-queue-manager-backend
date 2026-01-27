@@ -1,4 +1,5 @@
 const express = require('express');
+const activityLogController = require('../controllers/activityLogController');
 const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
@@ -18,12 +19,15 @@ const router = express.Router();
  *         schema:
  *           type: integer
  *           default: 10
+ *       - in: query
+ *         name: skip
+ *         schema:
+ *           type: integer
+ *           default: 0
  *     responses:
  *       200:
  *         description: List of activity logs
  */
-router.get('/', authMiddleware, (req, res) => {
-  res.json({ message: 'Activity logs routes coming soon' });
-});
+router.get('/', authMiddleware, activityLogController.getActivityLogs);
 
 module.exports = router;
